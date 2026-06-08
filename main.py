@@ -1,5 +1,10 @@
 from playwright.sync_api import sync_playwright
-from playwright_stealth import Stealth
+from playwright_stealth import Stealth # type: ignore
+from dotenv import load_dotenv
+import requests
+import os
+
+load_dotenv()
 
 def get_job_count():
     with sync_playwright() as p:
@@ -16,14 +21,23 @@ def get_job_count():
 
     return count
 
+def send_notif(message: str) -> None:
+    webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+
+    if not webhook_url:
+        print("Webhook URL not found in environment variables.")
+        return
+
+    requests.post(webhook_url, json={"content": message})
+
 if __name__ == "__main__":
     job_count = get_job_count()
     with open("previous_job_count.txt", "r") as f:
         previous_job_count = int(f.read().strip())
     
     if job_count == previous_job_count:
-        print("No new job postings.")
+        send_notif("No new job postings.")
     else:
-        print("New job postings found!")
+        send_notif("<@549414067228377139> New job postings found!")
         with open("previous_job_count.txt", "w") as f:
             f.write(str(job_count))
