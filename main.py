@@ -38,6 +38,6 @@ if __name__ == "__main__":
     if job_count == previous_job_count:
         send_notif("No new job postings.")
     else:
-        send_notif(f"<{os.getenv("DISCORD_USER_ID")}> New job postings found!")
+        send_notif(f"<@{os.getenv("DISCORD_USER_ID")}> New job postings found!")
         with open("previous_job_count.txt", "w") as f:
             f.write(str(job_count))
