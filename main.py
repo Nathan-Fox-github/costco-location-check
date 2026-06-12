@@ -22,7 +22,7 @@ def get_job_count():
     return count
 
 def send_notif(message: str) -> None:
-    webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+    webhook_url = os.getenv('DISCORD_WEBHOOK_URL')
 
     if not webhook_url:
         print("Webhook URL not found in environment variables.")
@@ -38,6 +38,6 @@ if __name__ == "__main__":
     if job_count == previous_job_count:
         send_notif("No new job postings.")
     else:
-        send_notif(f"<@{os.getenv("DISCORD_USER_ID")}> New job postings found at {os.getenv('URL')}!")
+        send_notif(f"<@{os.getenv('DISCORD_USER_ID')}> New job postings found at {os.getenv('URL')}!")
         with open("previous_job_count.txt", "w") as f:
             f.write(str(job_count))
